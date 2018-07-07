@@ -27,18 +27,4 @@ func main() {
 	practicerouter.Methods("GET").Path("/hello").HandlerFunc(handler.handleGenericHello)
 	practicerouter.Methods("GET").Path("/hello/{name}").HandlerFunc(handler.handleSpecificHello)
 	log.Fatal(http.ListenAndServe(":12345", practicerouter))
-
-	// sig := make(chan os.Signal, 1)
-	// signal.Notify(sig, syscall.SIGINT, syscall.SIGIO)
-	//
-	// s := <-sig
-	//
-	// switch s {
-	// case syscall.SIGINT:
-	// 	fmt.Println("SIGINT received")
-	// case syscall.SIGIO:
-	// 	fmt.Println("SIGIO received")
-	// default:
-	// 	fmt.Printf("Signal received: %s\n", s)
-	// }
 }
