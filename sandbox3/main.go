@@ -29,18 +29,4 @@ func main() {
 	// Start a HTTP listener on port 12345 and configure the Gorilla Web Toolkit router
 	// as the main router for incoming traffic.
 	log.Fatal(http.ListenAndServe(":12345", practicerouter))
-
-	// sig := make(chan os.Signal, 1)
-	// signal.Notify(sig, syscall.SIGINT, syscall.SIGIO)
-	//
-	// s := <-sig
-	//
-	// switch s {
-	// case syscall.SIGINT:
-	// 	fmt.Println("SIGINT received")
-	// case syscall.SIGIO:
-	// 	fmt.Println("SIGIO received")
-	// default:
-	// 	fmt.Printf("Signal received: %s\n", s)
-	// }
 }
