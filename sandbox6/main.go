@@ -6,20 +6,20 @@ import (
 )
 
 var (
-	blubber string
-	blabber string
+	hostName string
+	hostIP   string
 )
 
 func main() {
+	// Parse the flags passed to the application
 	flag.Parse()
-
-	fmt.Println("This is the main() function")
-	fmt.Printf("Flag 'blubber': %s\n", blubber)
-	fmt.Printf("Flag 'blabber': %s\n", blabber)
+	// Print out the flags received
+	fmt.Printf("Flag 'hostName': %s\n", hostName)
+	fmt.Printf("Flag 'hostIP'  : %s\n", hostIP)
 }
 
+// init will be executed before the main method
 func init() {
-	fmt.Println("This is the init() function")
-	flag.StringVar(&blubber, "blubber", "yo", "This is the 'blubber' test flag")
-	flag.StringVar(&blabber, "blabber", "ya", "This is the 'blabber' test flag")
+	flag.StringVar(&hostName, "hostName", "localhost", "This is the 'Host Name' flag")
+	flag.StringVar(&hostIP, "hostIP", "127.0.0.1", "This is the 'Host IP' flag")
 }
