@@ -2,66 +2,37 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
 	"time"
 )
 
-func producer(min, max, step int, channel chan string) {
-	for i := min; i < max; i += step {
-		channel <- fmt.Sprintf("producer[%d,%d,%d] = %d", min, max, step, i)
-		time.Sleep(500 * time.Millisecond)
+var logMainProg = log.New(os.Stdout, "[--main--] ", log.Ldate|log.Ltime)
+var logConsumer = log.New(os.Stdout, "[consumer] ", log.Ldate|log.Ltime)
+var logProducer = log.New(os.Stdout, "[producer] ", log.Ldate|log.Ltime)
+
+func producer(min, max int, channel chan string) {
+	logProducer.Printf("Started (min=%d, max=%d)\n", min, max)
+	defer logProducer.Println("Exited")
+	for i := min; i <= max; i++ {
+		channel <- fmt.Sprintf("Test-%d", i)
+		time.Sleep(1 * time.Second)
 	}
 	close(channel)
-	fmt.Println("*** producer exited!")
 }
 
 func consumer(channel chan string) {
+	logConsumer.Println("Started")
+	defer logConsumer.Println("Exited")
 	val, ok := <-channel
 	for ok {
-		fmt.Printf("consumer read \"%s\"\n", val)
-		time.Sleep(30 * time.Millisecond)
+		logConsumer.Printf("Read: \"%s\"\n", val)
 		val, ok = <-channel
 	}
-	fmt.Println("*** consumer exited!")
-}
-
-func selector(channel chan string) {
-	for {
-		select {
-		case v, ok := <-channel:
-			if !ok {
-				fmt.Println("*** selector exited!")
-				return
-			}
-			fmt.Printf("selector received \"%s\"\n", v)
-		}
-	}
-}
-
-type Vertex struct {
-	x, y int
 }
 
 func main() {
-	// a1 := data.Create(123, "King St.", "Arlington", "VA", 22204)
-	// fmt.Println(a1)
-	// a1 = data.Create(321, "Jefferson Rd.", "Charlottesvill", "VA", 12345)
-	// fmt.Println(a1)
-
-	// c := make(chan string)
-	// go producer(4, 40, 2, c)
-	// go consumer(c)
-	// selector(c)
-
-	var v1 Vertex
-	var v2 *Vertex
-
-	v1 = Vertex{1, 2}
-	v2 = &v1
-
-	fmt.Printf("v1 = %v\n", v1)
-	fmt.Printf("v2 = %v\n", v2)
-	fmt.Println("---- modify ----")
-	v2.x = 4
-	fmt.Printf("v1 = %v\n", v1)
-	fmt.Printf("v2 = %v\n", v2)
+	ch := make(chan string, 2)
+	go producer(0, 30, ch)
+	consumer(ch)
 }
